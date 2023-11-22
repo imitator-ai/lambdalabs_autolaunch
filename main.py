@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
         if len(avail_regions) > 0:
             send_to_slack(f"Launching {instance_type} in: {avail_regions[0]}")
-            launch_result = launch_instance(instance_type, ssh_key, avail_regions[0])
+            launch_result = launch_instance(instance_type, ssh_key, avail_regions[0]['name'])
             if 'error' in launch_result:
                 send_to_slack(f"Error launching {instance_type} in {avail_regions[0]}: {launch_result['error']['message']}")
             else:
