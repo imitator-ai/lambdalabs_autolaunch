@@ -57,8 +57,8 @@ if __name__ == '__main__':
 
     load_dotenv()
 
-    instance_type = os.getenv('INSTANCE_TYPE')
-    ssh_key = os.getenv('SSH_KEY')
+    instance_type = os.getenv('LAMBDALABS_INSTANCE_TYPE')
+    ssh_key = os.getenv('LAMBDALABS_SSH_KEY_NAME')
 
     while True:
         instances_availability = get_available_instances()
