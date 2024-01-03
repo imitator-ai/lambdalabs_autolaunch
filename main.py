@@ -15,6 +15,8 @@ def send_to_slack(msg):
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+    if response.status_code != 200:
+        raise Exception(f"Error sending to slack: {response.text}")
 
     return response.text
 
@@ -49,6 +51,10 @@ def get_available_instances():
     }
 
     response = requests.request("GET", url, headers=headers).json()
+
+    if 'error' in response:
+        send_to_slack(f"Error getting available instances: {response['error']['message']}")
+        raise Exception(response['error']['message'])
 
     return response
 
