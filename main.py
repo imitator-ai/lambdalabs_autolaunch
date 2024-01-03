@@ -72,7 +72,7 @@ if __name__ == '__main__':
     while True:
         instances_availability = get_available_instances()
         avail_regions = instances_availability['data'][instance_type]['regions_with_capacity_available']
-        print(f"{instance_type} regions: {avail_regions}")
+        print(f"{instance_type} is available in the following regions: {avail_regions}")
 
         if len(avail_regions) > 0:
             send_to_slack(f"Launching {instance_type} in: {avail_regions[0]}")
