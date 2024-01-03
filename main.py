@@ -21,7 +21,7 @@ def send_to_slack(msg):
     return response.text
 
 
-def launch_instance(instance_type_name, ssh_key, region):
+def launch_instance(instance_type_name, ssh_key, region, file_system_name=None):
     url = "https://cloud.lambdalabs.com/api/v1/instance-operations/launch"
     payload = json.dumps({
         "region_name": region,
@@ -29,7 +29,7 @@ def launch_instance(instance_type_name, ssh_key, region):
         "ssh_key_names": [
             ssh_key
         ],
-        "file_system_names": [],
+        "file_system_names": [file_system_name] if file_system_name and file_system_name.strip() else [],
         "quantity": 1,
         "name": f"{ssh_key}/"
     })
@@ -67,6 +67,7 @@ if __name__ == '__main__':
 
     instance_type = os.getenv('LAMBDALABS_INSTANCE_TYPE')
     ssh_key = os.getenv('LAMBDALABS_SSH_KEY_NAME')
+    file_system_name = os.getenv('LAMBDALABS_FILE_SYSTEM_NAME')
 
     while True:
         instances_availability = get_available_instances()
@@ -75,7 +76,7 @@ if __name__ == '__main__':
 
         if len(avail_regions) > 0:
             send_to_slack(f"Launching {instance_type} in: {avail_regions[0]}")
-            launch_result = launch_instance(instance_type, ssh_key, avail_regions[0]['name'])
+            launch_result = launch_instance(instance_type, ssh_key, avail_regions[0]['name'], file_system_name)
             if 'error' in launch_result:
                 send_to_slack(f"Error launching {instance_type} in {avail_regions[0]}: {launch_result['error']['message']}")
             else:
