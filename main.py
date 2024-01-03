@@ -4,9 +4,11 @@ import os
 
 
 def send_to_slack(msg):
+    import socket
     url = os.getenv('SLACK_WEBHOOK_URL')
+    hostname = socket.gethostname()
     payload = json.dumps({
-        "text": msg
+        "text": f"{hostname}: {msg}"
     })
     headers = {
         'Content-Type': 'application/json'
